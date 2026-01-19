@@ -1,5 +1,5 @@
 # --- STAGE 1: Constructor (Build) ---
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ COPY package.json package-lock.json* ./
 RUN npm install
 
 # --- STAGE 2: Corredor (Runtime) ---
-FROM node:18-alpine AS runner
+FROM node:22-alpine AS runner
 
 # Nodo produce su propio usuario 'node' por seguridad, usémoslo
 USER node
@@ -35,4 +35,4 @@ COPY . .
 # Optimizamos Node para producción
 ENV NODE_ENV=production
 
-CMD ["node", "index.js"]
+CMD ["npm", "start"]
