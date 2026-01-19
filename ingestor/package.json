@@ -1,0 +1,17 @@
+{
+  "name": "arbitrage-ingestor",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "WebSocket Ingestor & ZeroMQ Publisher",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ccxt": "^4.5.33",
+    "dotenv": "^16.4.1",
+    "redis": "^4.6.12",
+    "socket.io": "^4.7.4",
+    "zeromq": "^6.0.0-beta.19"
+  }
+}

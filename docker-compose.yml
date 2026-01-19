@@ -1,0 +1,57 @@
+services:
+  web:
+    build: ./web
+    container_name: sniper-web
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    ports:
+      - "4321:4321"
+    networks:
+      - sniper-net
+    command: npm run dev
+
+  ingestor:
+    build: ./ingestor
+    container_name: sniper-ingestor
+    volumes:
+      - ./ingestor:/app
+      - /app/node_modules
+    environment:
+      - ZMQ_PORT=5555
+      - REDIS_HOST=redis
+    ports:
+      - "3000:3000" # Dashboard socket.io later
+    networks:
+      - sniper-net
+    depends_on:
+      - redis
+    command: npm start
+
+  engine:
+    build: ./engine
+    container_name: sniper-engine
+    volumes:
+      - ./engine:/app
+    environment:
+      - ZMQ_SRC_HOST=ingestor
+      - ZMQ_SRC_PORT=5555
+      - REDIS_HOST=redis
+    networks:
+      - sniper-net
+    depends_on:
+      - ingestor
+      - redis
+    command: python main.py
+
+  redis:
+    image: redis:alpine
+    container_name: sniper-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - sniper-net
+
+networks:
+  sniper-net:
+    driver: bridge

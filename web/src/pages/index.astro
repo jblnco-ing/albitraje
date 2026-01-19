@@ -1,0 +1,37 @@
+---
+import SignalMonitor from '../components/SignalMonitor.jsx';
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<title>ARBITRAGE SNIPER // DASHBOARD</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+            body { font-family: 'JetBrains Mono', monospace; }
+        </style>
+	</head>
+	<body class="bg-slate-950 text-slate-200 min-h-screen selection:bg-green-500/30">
+        <div class="fixed inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-[100] bg-[length:100%_2px,3px_100%]"></div>
+        
+		<main className="relative z-10 container mx-auto py-10 px-4">
+            <header className="mb-12 text-center">
+                <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600 mb-2">
+                    ARBITRAGE SNIPER
+                </h1>
+                <p className="text-slate-500 uppercase tracking-widest text-xs md:text-sm">
+                    Motor de Baja Latencia // <span className="text-green-500">Node.js + Python + Redis</span>
+                </p>
+            </header>
+
+            {/* Client:load es CRITICO para que React funcione e hidrate */}
+			<SignalMonitor client:load />
+            
+            <footer className="mt-20 text-center text-slate-800 text-xs">
+                 SYSTEM STATUS: OPTIMAL // LISTENING ON PORT 3000
+            </footer>
+		</main>
+	</body>
+</html>
