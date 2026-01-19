@@ -15,8 +15,7 @@ const SignalMonitor = () => {
         socket.on('disconnect', () => setStatus('DESCONECTADO 🔴'));
 
         socket.on('arbitrage_signal', (signal) => {
-            // Añadir nueva señal al inicio
-            setSignals(prev => [signal, ...prev].slice(0, 50)); // Mantener ultimas 50
+            setSignals(prev => [signal, ...prev].slice(0, 50));
         });
 
         return () => socket.disconnect();
@@ -70,7 +69,13 @@ const SignalMonitor = () => {
                                 </div>
 
                                 {/* DERECHA: Ganancia */}
-                                <div className="text-right">
+                                <div className="text-right flex flex-col items-end">
+                                    <div className="flex items-baseline gap-2">
+                                        <span className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">Latencia:</span>
+                                        <span className={`text-[10px] font-bold ${sig.internal_latency_ms < 3 ? 'text-blue-400' : 'text-yellow-500'}`}>
+                                            {sig.internal_latency_ms}ms
+                                        </span>
+                                    </div>
                                     <div className="text-2xl font-black text-green-400 tabular-nums tracking-tighter">
                                         {sig.spread_percentage > 0 ? '+' : ''}{sig.spread_percentage}%
                                     </div>

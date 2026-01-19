@@ -30,13 +30,14 @@ async function startExchangeStream(exchangeId, zmqSocket) {
     while (true) {
         try {
             const ticker = await exchange.watchTicker(SYMBOL);
+            const arrivalTime = Date.now(); // T1: Registro de entrada
 
             const payload = {
                 exchange: exchangeId,
                 symbol: 'BTC/USDT',
                 bid: parseFloat(ticker.bid),
                 ask: parseFloat(ticker.ask),
-                timestamp: Date.now()
+                timestamp: arrivalTime
             };
 
             console.log(`📥 [${exchangeId}] Bid: ${payload.bid} | Ask: ${payload.ask}`);

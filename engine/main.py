@@ -6,6 +6,7 @@ import orjson  # Faster json parsing
 import redis.asyncio as redis
 from colorama import Fore, Style, init
 import logging
+import time
 
 # Init colors
 init()
@@ -77,6 +78,7 @@ async def process_message(msg: bytes, rc: redis.Redis):
                         sell_ex=exchange,
                         sell_price=current_bid,
                         spread=spread_a,
+                        entry_timestamp=data["timestamp"],
                         redis_client=rc,
                     )
 
@@ -95,6 +97,7 @@ async def process_message(msg: bytes, rc: redis.Redis):
                         sell_ex=other_exchange,
                         sell_price=other_data["bid"],
                         spread=spread_b,
+                        entry_timestamp=data["timestamp"],
                         redis_client=rc,
                     )
 
@@ -103,8 +106,11 @@ async def process_message(msg: bytes, rc: redis.Redis):
 
 
 async def execute_arbitrage(
-    buy_ex, buy_price, sell_ex, sell_price, spread, redis_client
+    buy_ex, buy_price, sell_ex, sell_price, spread, entry_timestamp, redis_client
 ):
+    finish_time = time.time() * 1000
+    latency_ms = round(finish_time - entry_timestamp, 3)
+
     signal = {
         "type": "ARBITRAGE_FOUND",
         "buy_exchange": buy_ex,
@@ -112,12 +118,14 @@ async def execute_arbitrage(
         "sell_exchange": sell_ex,
         "sell_price": sell_price,
         "spread_percentage": round(spread, 3),
+        "internal_latency_ms": latency_ms,
         "timestamp": asyncio.get_running_loop().time(),
     }
 
     # Log visual de alta prioridad
     msg = (
         f"{Fore.GREEN}============ ARBITRAJE DETECTADO ============\n"
+        f"LATENCIA INTERNA: {signal['internal_latency_ms']}ms\n"
         f"SPREAD: {signal['spread_percentage']}%\n"
         f"COMPRAR en {buy_ex} a {buy_price}\n"
         f"VENDER  en {sell_ex} a {sell_price}\n"
