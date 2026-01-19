@@ -30,6 +30,31 @@ const DASHBOARD_PORT = 3000;
 
 const SYMBOL = "BTC/USDT";
 
+// --- Cola de Mensajes para ZeroMQ ---
+// Evita el error "Socket is busy writing" al serializar los envíos
+const zmqQueue: string[] = [];
+let isProcessingQueue = false;
+
+async function processZmqQueue(zmqSocket: Push) {
+  if (isProcessingQueue) return;
+  isProcessingQueue = true;
+
+  while (zmqQueue.length > 0) {
+    const msg = zmqQueue.shift();
+    if (msg) {
+      try {
+        await zmqSocket.send(msg);
+      } catch (err: any) {
+        console.error("⚠️ Error enviando a ZeroMQ:", err.message);
+        // Si falla, lo devolvemos al principio de la cola para no perderlo
+        zmqQueue.unshift(msg);
+        await new Promise((resolve) => setTimeout(resolve, 10)); // Breve pausa
+      }
+    }
+  }
+  isProcessingQueue = false;
+}
+
 async function startExchangeStream(exchangeId: string, zmqSocket: Push) {
   console.log(`🔌 Iniciando stream para ${exchangeId}...`);
 
@@ -56,9 +81,22 @@ async function startExchangeStream(exchangeId: string, zmqSocket: Push) {
         timestamp: arrivalTime,
       };
 
-      await zmqSocket.send(JSON.stringify(payload));
+      // En lugar de enviar directo, encolamos
+      zmqQueue.push(JSON.stringify(payload));
+      processZmqQueue(zmqSocket); // Disparamos el procesador de cola (no bloqueante aquí)
     } catch (e: any) {
-      console.error(`❌ Error en ${exchangeId}:`, e.message);
+      console.error(`❌ Error en conexión con ${exchangeId}:`, e.message);
+
+      // Intentamos cerrar la conexión limpiamente antes de reintentar
+      try {
+        await exchange.close();
+      } catch (closeError) {
+        // Ignorar error al cerrar
+      }
+
+      console.log(
+        `🔄 Reintentando conexión con ${exchangeId} en 5 segundos...`,
+      );
       await new Promise((resolve) => setTimeout(resolve, 5000));
     }
   }
