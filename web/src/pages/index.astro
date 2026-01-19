@@ -1,5 +1,6 @@
 ---
 import SignalMonitor from '../components/SignalMonitor.tsx';
+import '../styles/global.css';
 ---
 
 <html lang="es">
@@ -7,31 +8,74 @@ import SignalMonitor from '../components/SignalMonitor.tsx';
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
-		<title>ARBITRAGE SNIPER // DASHBOARD</title>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
-            body { font-family: 'JetBrains Mono', monospace; }
-        </style>
+		<title>KAIROS // SNIPER</title>
+		{/* Importar fuentes cyberpunk */}
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
 	</head>
-	<body class="bg-slate-950 text-slate-200 min-h-screen selection:bg-green-500/30">
-        <div class="fixed inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-[100] bg-[length:100%_2px,3px_100%]"></div>
-        
-		<main className="relative z-10 container mx-auto py-10 px-4">
-            <header className="mb-12 text-center">
-                <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600 mb-2">
-                    ARBITRAGE SNIPER
-                </h1>
-                <p className="text-slate-500 uppercase tracking-widest text-xs md:text-sm">
-                    Motor de Baja Latencia // <span className="text-green-500">Node.js + Python + Redis</span>
-                </p>
-            </header>
+	<body className="bg-[#030305] text-cyan-50 min-h-screen font-['JetBrains_Mono'] relative overflow-x-hidden selection:bg-cyan-500/30">
+		
+		{/* Fondo Grid Animado estilo TRON */}
+		<div className="fixed inset-0 z-0 pointer-events-none opacity-[0.1]"
+			 style={{
+				 backgroundImage: `
+                    linear-gradient(to right, #4f4f4f2e 1px, transparent 1px),
+                    linear-gradient(to bottom, #4f4f4f2e 1px, transparent 1px)
+                 `,
+				 backgroundSize: '40px 40px',
+				 maskImage: 'radial-gradient(circle at 50% 50%, black 40%, transparent 90%)'
+			 }}>
+		</div>
+		
+		{/* Vignette oscura para focus */}
+		<div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,#000000_120%)]"></div>
 
-            {/* Client:load es CRITICO para que React funcione e hidrate */}
-			<SignalMonitor client:load />
+        {/* Scanlines CRT */}
+        <div className="fixed inset-0 pointer-events-none z-[50] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%]"></div>
+
+		<div className="relative z-10 container mx-auto px-4 py-8 max-w-5xl">
+			<header className="mb-16 text-center relative">
+				<div className="relative inline-block group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-cyan-600 via-blue-500 to-purple-600 rounded blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                    <div className="relative border border-cyan-900/30 bg-[#0a0a0a]/90 backdrop-blur-xl px-12 py-8 rounded-none clip-path-polygon">
+                        <h1 className="font-['Orbitron'] text-5xl md:text-7xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-cyan-500 to-blue-500 drop-shadow-[0_0_25px_rgba(6,182,212,0.4)]">
+                            KAIROS
+                        </h1>
+                        <div className="flex justify-between items-center mt-4 border-t border-cyan-900/50 pt-3">
+                             <p className="text-[10px] text-cyan-600 tracking-[0.4em] uppercase font-bold">Latency Arbitrage System</p>
+                             <div className="flex gap-2">
+                                <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
+                                <span className="h-1.5 w-1.5 rounded-full bg-cyan-500/50"></span>
+                                <span className="h-1.5 w-1.5 rounded-full bg-cyan-500/30"></span>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+			</header>
+
+			<main>
+				<SignalMonitor client:load />
+			</main>
             
-            <footer className="mt-20 text-center text-slate-800 text-xs">
-                 SYSTEM STATUS: OPTIMAL // LISTENING ON PORT 3000
+            <footer className="mt-24 text-center">
+                <p className="text-[10px] text-zinc-700 font-mono tracking-widest">
+                    SECURE CONNECTION // ENCRYPTED // NODE.JS • PYTHON • REDIS
+                </p>
             </footer>
-		</main>
+		</div>
+
+        <style is:global>
+            .clip-path-polygon {
+                clip-path: polygon(
+                    0 0, 
+                    100% 0, 
+                    100% 85%, 
+                    95% 100%, 
+                    5% 100%, 
+                    0 85%
+                );
+            }
+        </style>
 	</body>
 </html>

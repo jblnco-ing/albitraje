@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neon-green: #00ff9d;
+  --color-neon-blue: #00f3ff;
+  --font-orbitron: 'Orbitron', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Fallback / Base Styles para asegurar Cyberpunk Look */
+body {
+    background-color: #030305; /* Fondo negro profundo */
+    color: #ecfeff; /* Texto cyan muy claro */
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    min-height: 100vh;
+    padding: 2rem; /* Espaciado generoso */
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Fondo Grid Manual */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 255, 157, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 157, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Scrollbar Cyberpunk */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #0a0a0a; 
+}
+::-webkit-scrollbar-thumb {
+    background: #00ff9d; 
+    border-radius: 4px;
+}
