@@ -1,37 +1,42 @@
 # --- STAGE 1: Constructor ---
-FROM python:3.11-slim AS builder
+# Usamos la imagen oficial de astral-sh/uv para máxima velocidad
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim AS builder
+
+# Evitar que uv cree un venv por defecto, instalamos en el sistema del builder
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
 WORKDIR /app
 
-# Instalar dependencias para compilar módulos nativos
+# Instalar dependencias del sistema necesarias para compilar uvloop/pyzmq
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Crear un entorno virtual para aislar las dependencias
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copiar archivos de dependencias
+COPY pyproject.toml uv.lock ./
+# Sincronizamos e instalamos las dependencias
+RUN uv sync --frozen --no-dev --no-install-project
 
 # --- STAGE 2: Corredor ---
-FROM python:3.11-slim AS runner
+FROM python:3.11-slim-bookworm AS runner
 
-# Crear usuario de sistema para no correr como root
+# Seguridad: usuario no-root
 RUN groupadd -r sniper && useradd -r -g sniper sniper
 
 WORKDIR /app
 
-# Copiar el entorno virtual desde el builder
-COPY --from=builder /opt/venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+# Copiamos el entorno instalado por 'uv'
+COPY --from=builder /app/.venv /app/.venv
 
-# Copiar el código
-COPY . .
+# Seteamos el PATH para usar el entorno de uv
+ENV PATH="/app/.venv/bin:$PATH"
 
-# Asegurar permisos
+# Copiamos el código
+COPY main.py .
+
+# Permisos
 RUN chown -R sniper:sniper /app
 USER sniper
 

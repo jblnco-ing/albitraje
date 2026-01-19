@@ -26,7 +26,7 @@ Sistema de arbitraje de alta frecuencia simulado usando Node.js, Python (uvloop)
 
 ### Fase 3: Quant Engine (Python)
 
-- [ ] Inicializar entorno (`requirements.txt`: `pyzmq`, `uvloop`, `redis`, `orjson` para parsing rápido).
+- [ ] Inicializar entorno (`pyproject.toml` vía `uv`: `pyzmq`, `uvloop`, `redis`, `orjson` para parsing rápido).
 - [ ] Implementar `asyncio` loop con política `uvloop`.
 - [ ] Configurar ZeroMQ PULL socket.
 - [ ] Crear estructura de datos en memoria (Diccionario simple para BBO: Best Bid/Offer).
