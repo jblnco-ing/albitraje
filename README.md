@@ -116,6 +116,6 @@ The dashboard isn't just "pretty"—it's a functional HUD designed for 24/7 moni
 
 ---
 
-### Developed by [Your Name/GitHub Name]
+### Developed by jblnco-ing
 
 _Passionate about High-Frequency Systems, distributed architectures, and modern engineering._
