@@ -28,7 +28,7 @@ REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 SPREAD_THRESHOLD = 0
 
 # Estado del sistema (In-Memory Order Book)
-# Almacenaremos solo el mejor Bid y Ask: {'binance': {'bid': 0, 'ask': 0}, 'kraken': ...}
+# Almacenaremos solo el mejor Bid y Ask: {'bitget': {'bid': 0, 'ask': 0}, 'kraken': ...}
 ORDER_BOOK = {}
 
 

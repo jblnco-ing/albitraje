@@ -129,7 +129,7 @@ async function run() {
 
   // 4. Lanzar Streams
   Promise.all([
-    startExchangeStream("binance", socket),
+    startExchangeStream("bitget", socket),
     startExchangeStream("coinbase", socket),
   ]).catch((err) => {
     console.error("🔥 Error fatal en streams:", err);

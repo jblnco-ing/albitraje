@@ -18,9 +18,9 @@ Sistema de arbitraje de alta frecuencia simulado usando Node.js, Python (uvloop)
 ### Fase 2: Ingestor (Node.js)
 
 - [ ] Inicializar proyecto (`package.json` con `zeromq`, `ws`).
-- [ ] Implementar conexión WebSocket a **Binance** (BTC/USDT).
+- [ ] Implementar conexión WebSocket a **Bitget** (BTC/USDT).
 - [ ] Implementar conexión WebSocket a **Kraken** (XBT/USDT).
-- [ ] Normalización de datos: Unificar formato `{ exchange: 'binance', symbol: 'BTC/USDT', bid: 90000, ask: 90001, timestamp: ... }`.
+- [ ] Normalización de datos: Unificar formato `{ exchange: 'bitget', symbol: 'BTC/USDT', bid: 90000, ask: 90001, timestamp: ... }`.
 - [ ] Configurar ZeroMQ PUSH socket.
 - [ ] Enviar datos normalizados al motor.
 

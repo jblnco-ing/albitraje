@@ -47,7 +47,7 @@ The project leverages the best-of-breed technologies to minimize the path from m
 
 ```mermaid
 graph TD
-    A[Exchange WS: Binance] -->|Tick| B(Node.js Ingestor)
+    A[Exchange WS: Bitget] -->|Tick| B(Node.js Ingestor)
     C[Exchange WS: Coinbase] -->|Tick| B
     B -->|ZeroMQ PUSH| D{Quant Engine: Python}
     D -->|Internal Latency Trace| E[Spread Logic]
