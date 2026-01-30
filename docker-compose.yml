@@ -11,6 +11,11 @@ services:
       resources:
         limits:
           memory: 150M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   ingestor:
     build: ./ingestor
@@ -29,6 +34,11 @@ services:
       resources:
         limits:
           memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   engine:
     build: ./engine
@@ -47,6 +57,11 @@ services:
       resources:
         limits:
           memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
     image: redis:alpine
@@ -60,6 +75,11 @@ services:
       resources:
         limits:
           memory: 100M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 networks:
   sniper-net:

@@ -1,0 +1,43 @@
+name: Deploy to GCP VM
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.GCP_VM_IP }}
+          username: ${{ secrets.GCP_SSH_USER }}
+          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          script: |
+            # Ir al directorio del proyecto o clonarlo si no existe
+            if [ ! -d "albitraje" ]; then
+              git clone https://github.com/${{ github.repository }} albitraje
+            fi
+            cd albitraje
+
+            # Actualizar código
+            git pull origin master
+
+            # Asegurar que el setup inicial esté hecho (Docker, Swap, etc)
+            chmod +x setup_vm.sh
+            ./setup_vm.sh
+
+            # Crear archivo .env desde secretos de GitHub si es necesario
+            # Nota: Esto es opcional si ya configuraste el .env manual en la VM
+            # echo "${{ secrets.ENV_FILE }}" > .env
+
+            # Reiniciar contenedores
+            sudo docker compose up -d --build
+
+            # Limpieza de imágenes viejas para no llenar el disco de 30GB
+            sudo docker image prune -f
