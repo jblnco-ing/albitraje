@@ -7,8 +7,10 @@ services:
       - "4321:4321"
     networks:
       - sniper-net
-    depends_on:
-      - ingestor
+    deploy:
+      resources:
+        limits:
+          memory: 150M
 
   ingestor:
     build: ./ingestor
@@ -23,6 +25,10 @@ services:
       - sniper-net
     depends_on:
       - redis
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   engine:
     build: ./engine
@@ -37,14 +43,23 @@ services:
     depends_on:
       - ingestor
       - redis
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   redis:
     image: redis:alpine
     container_name: sniper-redis
     restart: unless-stopped
-    command: redis-server --appendonly yes
+    # Optimizamos Redis para ahorrar RAM: sin persistencia pesada
+    command: redis-server --maxmemory 64mb --maxmemory-policy allkeys-lru --save ""
     networks:
       - sniper-net
+    deploy:
+      resources:
+        limits:
+          memory: 100M
 
 networks:
   sniper-net:
