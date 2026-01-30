@@ -18,6 +18,8 @@ jobs:
           host: ${{ secrets.GCP_VM_IP }}
           username: ${{ secrets.GCP_SSH_USER }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          timeout: 10m
+          command_timeout: 10m
           script: |
             # 1. Instalar git si no existe
             if ! command -v git &> /dev/null; then

@@ -8,9 +8,16 @@ NC='\033[0m' # No Color
 
 echo -e "${CYAN}🚀 Iniciando Setup de KAIROS SNIPER en Google Cloud VM...${NC}"
 
-# 1. ACTUALIZACIÓN DEL SISTEMA
-echo -e "${YELLOW}📦 Actualizando paquetes del sistema...${NC}"
-sudo apt-get update && sudo apt-get upgrade -y
+# 1. ACTUALIZACIÓN DEL SISTEMA (Solo si es necesario)
+if [ ! -f /tmp/setup_done ]; then
+    echo -e "${YELLOW}📦 Actualizando paquetes del sistema (esto puede tardar)...${NC}"
+    # DEBIAN_FRONTEND=noninteractive evita prompts que rompen el CI/CD
+    sudo DEBIAN_FRONTEND=noninteractive apt-get update
+    sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+    touch /tmp/setup_done
+else
+    echo -e "${GREEN}✅ Sistema ya actualizado anteriormente.${NC}"
+fi
 
 # 2. CONFIGURACIÓN DE SWAP (CRUCIAL PARA E2-MICRO)
 echo -e "${YELLOW}💾 Configurando 2GB de memoria SWAP...${NC}"
