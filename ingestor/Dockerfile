@@ -20,8 +20,8 @@ RUN apk add --no-cache libzmq
 
 WORKDIR /app
 
-# Copiamos package.json para que npm start funcione
-COPY --from=builder /app/package.json ./
+# Copiamos package.json y package-lock.json para que npm ci funcione
+COPY --from=builder /app/package*.json ./
 
 # Instalamos SOLO dependencias de producción para ahorrar espacio y RAM
 # Esto evita llevar TypeScript y otras herramientas de desarrollo a la VM

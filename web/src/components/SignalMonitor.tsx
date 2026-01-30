@@ -17,7 +17,13 @@ const SignalMonitor: React.FC = () => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const socket: Socket = io("http://localhost:3000");
+    // Detectar automáticamente el host si no es localhost
+    const socketHost =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : `http://${window.location.hostname}:3000`;
+
+    const socket: Socket = io(socketHost);
 
     socket.on("connect", () => {
       setStatus("SYSTEM ONLINE");

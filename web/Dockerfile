@@ -29,5 +29,5 @@ USER node
 # Exponemos el puerto de Astro
 EXPOSE 4321
 
-# Corremos la previsualización de producción (más eficiente en RAM que el modo dev)
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
+# Corremos la previsualización de producción
+CMD ["npm", "start"]
