@@ -19,25 +19,26 @@ jobs:
           username: ${{ secrets.GCP_SSH_USER }}
           key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
           script: |
-            # Ir al directorio del proyecto o clonarlo si no existe
+            # 1. Instalar git si no existe
+            if ! command -v git &> /dev/null; then
+              sudo apt-get update && sudo apt-get install -y git
+            fi
+
+            # 2. Ir al directorio del proyecto o clonarlo si no existe
             if [ ! -d "albitraje" ]; then
               git clone https://github.com/${{ github.repository }} albitraje
             fi
             cd albitraje
 
-            # Actualizar código
+            # 3. Actualizar código
             git pull origin master
 
-            # Asegurar que el setup inicial esté hecho (Docker, Swap, etc)
+            # 4. Ejecutar setup (instala Docker, Swap, etc.)
             chmod +x setup_vm.sh
             ./setup_vm.sh
 
-            # Crear archivo .env desde secretos de GitHub si es necesario
-            # Nota: Esto es opcional si ya configuraste el .env manual en la VM
-            # echo "${{ secrets.ENV_FILE }}" > .env
-
-            # Reiniciar contenedores
+            # 5. Reiniciar contenedores
             sudo docker compose up -d --build
 
-            # Limpieza de imágenes viejas para no llenar el disco de 30GB
+            # 6. Limpieza de imágenes viejas
             sudo docker image prune -f
